@@ -1,0 +1,54 @@
+DROP DATABASE company;
+
+CREATE DATABASE company;
+USE company;
+
+CREATE TABLE employees (
+	emp_id INT PRIMARY KEY,
+    first_name VARCHAR(20) NOT NULL,
+    last_name VARCHAR(20) UNIQUE,
+    birth_day DATE NOT NULL,
+    role VARCHAR(20) DEFAULT 'Trainee',
+    shop_id INT,
+    manager_id INT
+);
+
+CREATE TABLE shops (
+	shop_id INT PRIMARY KEY,
+    city VARCHAR(20) NOT NULL,
+    manager_id INT
+);
+
+ALTER TABLE employees
+ADD FOREIGN KEY(shop_id) REFERENCES shops(shop_id) ON DELETE SET NULL;
+
+ALTER TABLE employees
+ADD FOREIGN KEY(manager_id) REFERENCES employees(emp_id) ON DELETE SET NULL;
+
+ALTER TABLE shops
+ADD FOREIGN KEY(manager_id) REFERENCES employees(emp_id) ON DELETE SET NULL;
+
+CREATE TABLE customers (
+	customer_id INT PRIMARY KEY,
+    customer_last_name VARCHAR(20) UNIQUE,
+    shop_id INT,
+    FOREIGN KEY(shop_id) REFERENCES shops(shop_id) ON DELETE SET NULL
+);
+
+CREATE TABLE products (
+	product_id INT PRIMARY KEY,
+    product_name VARCHAR(40),
+    price DECIMAL(5, 2) NOT NULL,
+    quantity INT
+);
+
+
+CREATE TABLE transactions (
+	transaction_id INT PRIMARY KEY,
+    product_id INT UNIQUE,
+    transaction_date_time DATETIME
+);
+
+ALTER TABLE transactions
+ADD FOREIGN KEY(product_id) REFERENCES products(product_id) ON DELETE SET NULL;
+

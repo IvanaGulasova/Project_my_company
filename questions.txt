@@ -1,0 +1,87 @@
+# vsetci zamestnanci 
+SELECT * FROM employees;
+
+# vsetci zamestnanci zoradeni podla role
+SELECT * FROM employees
+ORDER BY role;
+
+# emp_id, meno a priezvisko zamestnancov
+SELECT emp_id, first_name, last_name
+FROM employees;
+
+# prvi piati zakaznici
+SELECT * FROM customers
+LIMIT 5;
+
+# ake rozne pozicie mame
+SELECT DISTINCT role
+FROM employees;
+
+# kolko mame celkom zakaznikov
+SELECT COUNT(customer_id) 
+FROM customers;
+
+# kolko mame celkom veducich
+SELECT COUNT(emp_id)
+FROM employees
+WHERE role = 'Leader';
+
+# vsetci zamestnanci narodeni po 1.1.1995
+SELECT * FROM employees
+WHERE birth_day > '1990-01-01';
+
+# pocty zamestnancov podla role
+SELECT COUNT(emp_id), role
+FROM employees
+GROUP BY role;
+
+# pocty zakaznikov podla pobocky
+SELECT COUNT(customer_id), shop_id
+FROM customers
+GROUP BY shop_id;
+
+# meno, datum narodenia zamestnancov narodenych v mesiaci september
+SELECT first_name, birth_day FROM employees
+WHERE birth_day LIKE '____-08-%';
+
+# pokial sa priezvisko konci na 'ova' alebo 'ka'
+SELECT * FROM customers 
+WHERE customer_last_name LIKE '%ova' OR customer_last_name LIKE '%ka';
+
+# priezviska zamestnancov a zakaznikov ; stlpec sa bude volat priezviska
+SELECT last_name AS priezviska FROM employees 
+UNION
+SELECT customer_last_name FROM customers;
+
+# zjednot meno, priezvisko a mesto
+SELECT employees.first_name, employees.last_name, shops.city
+FROM employees
+JOIN shops
+ON employeeS.emp_id = shops.manager_id;
+
+# customer_id a priezvisko zakaznikov, ktori nakupili v Prahe
+SELECT customer_id, customer_last_name FROM customers
+WHERE shop_id IN (
+	SELECT shop_id FROM shops
+	WHERE shop_id = 1
+);
+
+# zmena nazvu tabulky employees na zamestnanci
+RENAME TABLE employees TO zamestnanci;
+
+# premenuj v tabulke stlpec role na nazov pozicia
+ALTER TABLE employees
+RENAME COLUMN role TO pozicia;
+
+# presun v tabulke employees stlpec role za emp_id
+ALTER TABLE employees
+MODIFY role VARCHAR(20)
+AFTER emp_id;
+
+# pridaj do tabulky employees stlpec email
+ALTER TABLE employees
+ADD email VARCHAR(20);
+
+# vymaz stlpec email
+ALTER TABLE employees
+DROP COLUMN email;
